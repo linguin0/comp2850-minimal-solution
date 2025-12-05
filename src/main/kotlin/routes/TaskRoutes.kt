@@ -299,24 +299,27 @@ private fun messageStatusFragment(
  * Week 7: GET /tasks/{id}/edit - Show inline edit form
  */
 private suspend fun ApplicationCall.handleEditTask(store: TaskStore) {
-    val id = parameters["id"] ?: run {
-        respond(HttpStatusCode.BadRequest)
-        return
-    }
+    timed("T2_edit", jsMode()) {
+        val id = parameters["id"] ?: run {
+            respond(HttpStatusCode.BadRequest)
+            return@timed
+        }
 
-    val task = store.getById(id)
-    if (task == null) {
-        respond(HttpStatusCode.NotFound)
-        return
-    }
+        val task = store.getById(id)
+        if (task == null) {
+            respond(HttpStatusCode.NotFound)
+            return@timed
+        }
 
-    if (isHtmxRequest()) {
-        // HTMX: return inline edit fragment
-        val html = renderTemplate("tasks/_edit.peb", mapOf("task" to task.toPebbleContext()))
-        respondText(html, ContentType.Text.Html)
-    } else {
-        // No-JS: redirect to list (would need edit mode support in index)
-        respondRedirect("/tasks")
+        if (isHtmxRequest()) {
+            // HTMX: return inline edit fragment
+            val html = renderTemplate("tasks/_edit.peb", mapOf("task" to task.toPebbleContext()))
+            respondText(html, ContentType.Text.Html)
+        } else {
+            // No-JS: redirect to list (would need edit mode support in index)
+            val html = renderTemplate("tasks/index.peb", mapOf("task" to task.toPebbleContext()))
+            respondText(html, ContentType.Text.Html)
+        }
     }
 }
 
