@@ -87,7 +87,13 @@
 
         <div id="task-area">
             {% include "tasks/_list.peb" %}
+
+            {% if task.id %}
+                % include "tasks/_edit.peb" with {"task": task} %}
+            {% endif %}
+
             {% include "tasks/_pager.peb" %}
+
         </div>
     </section>
 </article>

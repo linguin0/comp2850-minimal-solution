@@ -4,7 +4,7 @@
         hx-target="#task-{{ task.id }}"
         hx-swap="outerHTML">
 
-    <label for="title-{{ task.id }}">Title</label>
+    <label for="title-{{ task.id }}">{{ task.title }}</label>
     <input type="text"
            id="title-{{ task.id }}"
            name="title"
