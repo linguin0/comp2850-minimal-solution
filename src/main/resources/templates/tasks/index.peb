@@ -89,7 +89,7 @@
             {% include "tasks/_list.peb" %}
 
             {% if task.id %}
-                % include "tasks/_edit.peb" with {"task": task} %}
+                {% include "tasks/_edit.peb" with {"task": task} %}
             {% endif %}
 
             {% include "tasks/_pager.peb" %}
